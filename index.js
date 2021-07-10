@@ -5,8 +5,7 @@ const morgan = require("morgan");
 const compression = require("compression");
 const cacheControl = require("express-cache-controller");
 const axios = require("axios");
-const PORT = "8080";
-//const { nationalData, provData, eachProvData } = require("./fetchData");
+//const PORT = "8080";
 
 //require("dotenv").config();
 
@@ -125,6 +124,5 @@ app.get("/api/province/:provincename", async (req, res) => {
   });
 });
 
-module.exports = app;
-//const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => console.log(`Listening at port: ${PORT}`));
