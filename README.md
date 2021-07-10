@@ -12,6 +12,21 @@ APIs are deployed to [Heroku](https://covidtracker-vincenth19-be.herokuapp.com/a
 Data source is from Indonesian government. \
 [National Data](https://data.covid19.go.id/public/api/update.json) | [Basic Province Data](https://data.covid19.go.id/public/api/prov.json) | [Province Time Series Data](https://data.covid19.go.id/public/api/prov_detail_ACEH.json)
 
+# How to Run This?
+### Prequisite:
+[NodeJS](https://nodejs.org/en/)
+
+### Steps:
+1. Clone this project.
+2. Go to project directory in your terminal/command prompt.
+3. Type and execute/run `npm i`
+4. Type and execute/run `node .`
+
+This APIs are very basic, it does not even have error handling. \
+I'm still learning because backend isn't my forte. \ 
+
+### I hope you find this useful. Stay safe and healthy!
+
 ## API Endpoints
 `/api/national` [Heroku Link](https://covidtracker-backend.vercel.app/api/national/) | [Vercel Link](https://covidtracker-vincenth19-be.herokuapp.com/api/national) \
 Get COVID-19 data of Indonesia, total and daily update. Date format is DD/MM/YYYY and time is 24-hours.
@@ -148,19 +163,6 @@ I would say the age demographic and gender data are not up to date. And the loca
 }
 ```
 ---
-# How to Run This?
-### Prequisite:
-[NodeJS](https://nodejs.org/en/)
-
-### Steps:
-1. Clone this project.
-2. Go to project directory in your terminal/command prompt.
-3. Execute/type and run `node .`
-
-This APIs are very basic, it does not even have error handling. \
-I'm still learning because backend isn't my forte. \ 
-
-### I hope you find this useful. Stay safe and healthy!
 
 # Credits
 - [Reynadi531 that inspired me to make my own backend](https://github.com/Reynadi531/api-covid19-indonesia-v2)
