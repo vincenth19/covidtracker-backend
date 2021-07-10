@@ -3,6 +3,8 @@
 Hi everyone, this is API project that I made to gather COVID-19 data from Indonesian government.
 I made this because there is a CORS error when using the government's API. Therefore, I need to have this backend to solve my issue.
 
+Please star this project if you find it useful or interesting!
+
 I copied and modified [Reynadi531's API Project](https://github.com/Reynadi531/api-covid19-indonesia-v2)
 
 APIs are deployed to [Heroku](https://covidtracker-vincenth19-be.herokuapp.com/api) and [Vercel](https://covidtracker-backend.vercel.app/api/)
@@ -159,3 +161,6 @@ This APIs are very basic, it does not even have error handling. \
 I'm still learning because backend isn't my forte. \ 
 
 ### I hope you find this useful. Stay safe and healthy!
+
+# Credits
+- [Reynadi531 that inspired me to make my own backend](https://github.com/Reynadi531/api-covid19-indonesia-v2)
