@@ -36,7 +36,8 @@ app.get("/api", async (req, res) => {
     req.hostname == "localhost" ? `:${PORT}` : ""
   }`;
   res.json({
-    message: "CovidTracker API inspired by Reynadi531's API project",
+    message:
+      "CovidTracker API by Vincent Haryadi (vincenth19), inspired by Reynadi531's API project",
     covidtracker: "https://covidtracker.pages.dev",
     "project source": "https://github.com/vincenth19/covidtracker-backend",
     "my profile": "https://vincenth19.com",
