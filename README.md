@@ -150,7 +150,7 @@ I would say the age demographic and gender data are not up to date. And the loca
 ---
 # How to Run This?
 ### Prequisite:
-[NodeJS](http://google.com)
+[NodeJS](https://nodejs.org/en/)
 
 ### Steps:
 1. Clone this project.
