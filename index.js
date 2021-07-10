@@ -45,7 +45,7 @@ app.get("/api", async (req, res) => {
       "https://github.com/Reynadi531/api-covid19-indonesia-v2",
     endpoints: {
       national: [`${url}/api/national`],
-      daily: [`${url}/api/daily`],
+      daily: [`${url}/api/national/all_daily`],
       province: [`${url}/api/province/`],
       eachProvinceDaily: [
         `${url}/api/province/:provincename`,
