@@ -45,7 +45,7 @@ app.get("/api", async (req, res) => {
     endpoints: {
       national: [`${url}/api/national`],
       daily: [`${url}/api/daily`],
-      province: [`${url}/api/province/:provincename`],
+      province: [`${url}/api/province/`],
       eachProvinceDaily: [
         `${url}/api/province/:provincename`,
         `${url}/api/province/DKI_JAKARTA`,
