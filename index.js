@@ -5,9 +5,6 @@ const morgan = require("morgan");
 const compression = require("compression");
 const cacheControl = require("express-cache-controller");
 const axios = require("axios");
-//const PORT = "8080";
-
-//require("dotenv").config();
 
 const app = express();
 app.use(express.json());
@@ -41,10 +38,10 @@ app.get("/api", async (req, res) => {
   res.json({
     message: "CovidTracker API modified from Reynadi531 Project",
     covidtracker: "https://covidtracker.pages.dev",
-    "project source": "https://covidtracker.pages.dev",
-    "Reynadi531s project":
-      "https://github.com/Reynadi531/api-covid19-indonesia-v2",
+    "project source": "https://github.com/vincenth19/covidtracker-backend",
     "my profile": "https://vincenth19.com",
+    "inspired by Reynadi531s project":
+      "https://github.com/Reynadi531/api-covid19-indonesia-v2",
     endpoints: {
       national: [`${url}/api/national`],
       daily: [`${url}/api/daily`],
@@ -125,4 +122,4 @@ app.get("/api/province/:provincename", async (req, res) => {
 });
 
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => console.log(`Listening at port: ${PORT}`));
+app.listen(PORT, () => console.log(`API Live at port: ${PORT}`));
