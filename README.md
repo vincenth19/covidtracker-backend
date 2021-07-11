@@ -11,16 +11,16 @@ APIs are deployed to [Heroku](https://covidtracker-vincenth19-be.herokuapp.com/a
 Check those links for the endpoints.
 
 Data source is from Indonesian government. \
-[National Data](https://data.covid19.go.id/public/api/update.json) | [Basic Province Data](https://data.covid19.go.id/public/api/prov.json) | [Province Time Series Data](https://data.covid19.go.id/public/api/prov_detail_ACEH.json)
+
+Documentation of their API endpoints from the goverment can be found [here](https://documenter.getpostman.com/view/16605343/Tzm6nwoS#d35f1c32-56d8-4af1-8d6e-ef3397653f99). I made this myself since there in no info about it. 
+
+> All my API endpoints with `/raw` is raw data from the government.
+<br>The response from my APIs is going to be the same with the respective government's APIs. 
 
 ### Notes
 
 This APIs are very basic, it does not even have error handling. \
 I'm still learning because backend isn't my forte.  
-
-Documentation of raw data from the goverment can be found [here](https://documenter.getpostman.com/view/16605343/Tzm6nwoS#d35f1c32-56d8-4af1-8d6e-ef3397653f99). The response is going to be the same with mine. 
-
-> All my API endpoints with `/raw` is raw data from the government. 
 
 I hope you find this useful. Stay safe and healthy!
 
