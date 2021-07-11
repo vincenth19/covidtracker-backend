@@ -59,6 +59,13 @@ app.get("/api", async (req, res) => {
         `${url}/api/national/raw`,
         `${url}/api/province/raw`,
         `${url}/api/province/:provincename/raw`,
+        `${url}/api/test_and_vacc/raw`,
+        `${url}/api/kecamatan/raw`,
+        `${url}/api/rumah_sakit/raw`,
+        `${url}/api/lab/raw`,
+        `${url}/api/province_all_daily/raw`,
+        `${url}/api/province_simple/raw`,
+        `${url}/api/city_risk/raw`,
       ],
     },
   });
@@ -326,6 +333,69 @@ app.get("/api/province/:provincename/raw", async (req, res) => {
     "https://data.covid19.go.id/public/api/prov_detail_" +
       req.params.provincename +
       ".json"
+  );
+  res.status(200).send({
+    data,
+  });
+});
+
+app.get("/api/test_and_vacc/raw", async (req, res) => {
+  const { data } = await axios.get(
+    "https://data.covid19.go.id/public/api/pemeriksaan-vaksinasi.json"
+  );
+  res.status(200).send({
+    data,
+  });
+});
+
+app.get("/api/kecamatan/raw", async (req, res) => {
+  const { data } = await axios.get(
+    "https://data.covid19.go.id/public/api/kecamatan_rawan.json"
+  );
+  res.status(200).send({
+    data,
+  });
+});
+
+app.get("/api/rumah_sakit/raw", async (req, res) => {
+  const { data } = await axios.get(
+    "https://data.covid19.go.id/public/api/rs.json"
+  );
+  res.status(200).send({
+    data,
+  });
+});
+
+app.get("/api/lab/raw", async (req, res) => {
+  const { data } = await axios.get(
+    "https://data.covid19.go.id/public/api/lab.json"
+  );
+  res.status(200).send({
+    data,
+  });
+});
+
+app.get("/api/province_all_daily/raw", async (req, res) => {
+  const { data } = await axios.get(
+    "https://data.covid19.go.id/public/api/prov_time.json"
+  );
+  res.status(200).send({
+    data,
+  });
+});
+
+app.get("/api/province_simple/raw", async (req, res) => {
+  const { data } = await axios.get(
+    "https://data.covid19.go.id/public/api/prov_list.json"
+  );
+  res.status(200).send({
+    data,
+  });
+});
+
+app.get("/api/city_risk/raw", async (req, res) => {
+  const { data } = await axios.get(
+    "https://data.covid19.go.id/public/api/skor.json"
   );
   res.status(200).send({
     data,
