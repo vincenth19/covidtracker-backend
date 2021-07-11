@@ -7,7 +7,8 @@ Please star this project if you find it useful or interesting!
 
 I copied and modified [Reynadi531's API Project](https://github.com/Reynadi531/api-covid19-indonesia-v2)
 
-APIs are deployed to [Heroku](https://covidtracker-vincenth19-be.herokuapp.com/api) and [Vercel](https://covidtracker-backend.vercel.app/api/)
+APIs are deployed to [Heroku](https://covidtracker-vincenth19-be.herokuapp.com/api) and [Vercel](https://covidtracker-backend.vercel.app/api/) \
+Check those links for the endpoints.
 
 Data source is from Indonesian government. \
 [National Data](https://data.covid19.go.id/public/api/update.json) | [Basic Province Data](https://data.covid19.go.id/public/api/prov.json) | [Province Time Series Data](https://data.covid19.go.id/public/api/prov_detail_ACEH.json)
@@ -25,9 +26,13 @@ Data source is from Indonesian government. \
 This APIs are very basic, it does not even have error handling. \
 I'm still learning because backend isn't my forte. \ 
 
+Documentation of raw data from the goverment can be found [here](https://documenter.getpostman.com/view/16605343/Tzm6nwoS#d35f1c32-56d8-4af1-8d6e-ef3397653f99). The response is going to be the same with mine. 
+
+> Any API with the `/raw` is raw data from the government. 
+
 ### I hope you find this useful. Stay safe and healthy!
 
-## API Endpoints
+## API Endpoints (Work in Progress)
 `/api/national` [Heroku Link](https://covidtracker-backend.vercel.app/api/national/) | [Vercel Link](https://covidtracker-vincenth19-be.herokuapp.com/api/national) \
 Get COVID-19 data of Indonesia, total and daily update. Date format is DD/MM/YYYY and time is 24-hours.
 #### Sample response:
@@ -128,41 +133,8 @@ I would say the age demographic and gender data are not up to date. And the loca
 }
 ```
 ---
-`/api/province/:provincename` [Heroku Sample Link](https://covidtracker-backend.vercel.app/api/province/DKI_JAKARTA) | [Vercel Sample Link](https://covidtracker-vincenth19-be.herokuapp.com/api/province/DKI_JAKARTA)
-<br/> Get daily and overall data of COVID-19 per province from 1st March 2020 until today. Use underscore to replace space and param needs to be all capital letters (ex. DKI_JAKARTA). For now we can only query 1 province at a time.
-#### Sample response (Jakarta):
-```
-{
-  "dailyData": {
-    "last_date": "2021-07-09", <- string
-    "provinsi": "DKI JAKARTA", <- string
-    "kasus_total": 636383, <- number
-    "kasus_tanpa_tgl": 37, <- number
-    "kasus_dengan_tgl": 636346, <- number
-    "meninggal_persen": 1.4566699613283196, <- number
-    "meninggal_tanpa_tgl": 20, <- number
-    "meninggal_dengan_tgl": 9250, <- number
-    "sembuh_persen": 82.82119415509214, <- floating point
-    "sembuh_tanpa_tgl": 139, <- number
-    "sembuh_dengan_tgl": 526921, <- number
-    "list_perkembangan": [
-      {
-        "tanggal": 1583020800000, <- date, need to be converted (i.e. new Date(timestamp))
-        "KASUS": 2, <- number
-        "MENINGGAL": 0, <- number
-        "SEMBUH": 0, <- number
-        "DIRAWAT_OR_ISOLASI": 2, <- number
-        "AKUMULASI_KASUS": 2, <- number
-        "AKUMULASI_SEMBUH": 0, <- number
-        "AKUMULASI_MENINGGAL": 0, <- number
-        "AKUMULASI_DIRAWAT_OR_ISOLASI": 2 <- number
-      }
-      { more daily data objects here}
-    ]
-  },
-}
-```
----
+The rest is still in the making.
 
 # Credits
 - [Reynadi531 that inspired me to make my own backend](https://github.com/Reynadi531/api-covid19-indonesia-v2)
+- Reddit user [u/ThiccDemiglace](https://www.reddit.com/user/ThiccDemiglace/) for helping me find other gov's APIs endpoints.
