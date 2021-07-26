@@ -31,6 +31,9 @@ app.get("/", async (req, res) => {
   res.redirect("/api");
 });
 
+const PROXY_URL =
+  "https://blue-river-c848.vincenthary19.workers.dev/corsproxy/?apiurl=";
+
 app.get("/api", async (req, res) => {
   const url = `${req.protocol}://${req.hostname}${
     req.hostname == "localhost" ? `:${PORT}` : ""
@@ -73,7 +76,7 @@ app.get("/api", async (req, res) => {
 
 app.get("/api/national", async (req, res) => {
   const { data } = await axios.get(
-    "https://data.covid19.go.id/public/api/update.json"
+    `${PROXY_URL}https://data.covid19.go.id/public/api/update.json`
   );
   let modifiedData = {
     update: {
@@ -97,7 +100,7 @@ app.get("/api/national", async (req, res) => {
 
 app.get("/api/national/raw", async (req, res) => {
   const { data } = await axios.get(
-    "https://data.covid19.go.id/public/api/update.json"
+    `${PROXY_URL}https://data.covid19.go.id/public/api/update.json`
   );
   res.status(200).send({
     data,
@@ -106,7 +109,7 @@ app.get("/api/national/raw", async (req, res) => {
 
 app.get("/api/national/all_daily", async (req, res) => {
   const { data } = await axios.get(
-    "https://data.covid19.go.id/public/api/update.json"
+    `${PROXY_URL}https://data.covid19.go.id/public/api/update.json`
   );
   let modifiedData = data.update.harian.map((data) => {
     return {
@@ -132,7 +135,7 @@ app.get("/api/national/all_daily", async (req, res) => {
 
 app.get("/api/province", async (req, res) => {
   const { data } = await axios.get(
-    "https://data.covid19.go.id/public/api/prov.json"
+    `${PROXY_URL}https://data.covid19.go.id/public/api/prov.json`
   );
 
   let allProvinces = data.list_data.map((data) => {
@@ -165,7 +168,7 @@ app.get("/api/province", async (req, res) => {
 
 app.get("/api/province/more", async (req, res) => {
   const { data } = await axios.get(
-    "https://data.covid19.go.id/public/api/prov.json"
+    `${PROXY_URL}https://data.covid19.go.id/public/api/prov.json`
   );
 
   let allProvinces = data.list_data.map((data) => {
@@ -209,7 +212,7 @@ app.get("/api/province/more", async (req, res) => {
 
 app.get("/api/province/raw", async (req, res) => {
   const { data } = await axios.get(
-    "https://data.covid19.go.id/public/api/prov.json"
+    `${PROXY_URL}https://data.covid19.go.id/public/api/prov.json`
   );
   res.status(200).send({
     data,
@@ -218,7 +221,7 @@ app.get("/api/province/raw", async (req, res) => {
 
 app.get("/api/province/:provincename", async (req, res) => {
   const { data } = await axios.get(
-    "https://data.covid19.go.id/public/api/prov_detail_" +
+    `${PROXY_URL}https://data.covid19.go.id/public/api/prov_detail_` +
       req.params.provincename +
       ".json"
   );
@@ -250,7 +253,7 @@ app.get("/api/province/:provincename", async (req, res) => {
 
 app.get("/api/province/:provincename/more", async (req, res) => {
   const { data } = await axios.get(
-    "https://data.covid19.go.id/public/api/prov_detail_" +
+    `${PROXY_URL}https://data.covid19.go.id/public/api/prov_detail_` +
       req.params.provincename +
       ".json"
   );
@@ -300,7 +303,7 @@ app.get("/api/province/:provincename/more", async (req, res) => {
 
 app.get("/api/province/:provincename/all_daily", async (req, res) => {
   const { data } = await axios.get(
-    "https://data.covid19.go.id/public/api/prov_detail_" +
+    `${PROXY_URL}https://data.covid19.go.id/public/api/prov_detail_` +
       req.params.provincename +
       ".json"
   );
@@ -330,7 +333,7 @@ app.get("/api/province/:provincename/all_daily", async (req, res) => {
 
 app.get("/api/province/:provincename/raw", async (req, res) => {
   const { data } = await axios.get(
-    "https://data.covid19.go.id/public/api/prov_detail_" +
+    `${PROXY_URL}https://data.covid19.go.id/public/api/prov_detail_` +
       req.params.provincename +
       ".json"
   );
@@ -341,7 +344,7 @@ app.get("/api/province/:provincename/raw", async (req, res) => {
 
 app.get("/api/test_and_vacc/raw", async (req, res) => {
   const { data } = await axios.get(
-    "https://data.covid19.go.id/public/api/pemeriksaan-vaksinasi.json"
+    `${PROXY_URL}https://data.covid19.go.id/public/api/pemeriksaan-vaksinasi.json`
   );
   res.status(200).send({
     data,
@@ -350,7 +353,7 @@ app.get("/api/test_and_vacc/raw", async (req, res) => {
 
 app.get("/api/kecamatan/raw", async (req, res) => {
   const { data } = await axios.get(
-    "https://data.covid19.go.id/public/api/kecamatan_rawan.json"
+    `${PROXY_URL}https://data.covid19.go.id/public/api/kecamatan_rawan.json`
   );
   res.status(200).send({
     data,
@@ -359,7 +362,7 @@ app.get("/api/kecamatan/raw", async (req, res) => {
 
 app.get("/api/rumah_sakit/raw", async (req, res) => {
   const { data } = await axios.get(
-    "https://data.covid19.go.id/public/api/rs.json"
+    `${PROXY_URL}https://data.covid19.go.id/public/api/rs.json`
   );
   res.status(200).send({
     data,
@@ -368,7 +371,7 @@ app.get("/api/rumah_sakit/raw", async (req, res) => {
 
 app.get("/api/lab/raw", async (req, res) => {
   const { data } = await axios.get(
-    "https://data.covid19.go.id/public/api/lab.json"
+    `${PROXY_URL}https://data.covid19.go.id/public/api/lab.json`
   );
   res.status(200).send({
     data,
@@ -377,7 +380,7 @@ app.get("/api/lab/raw", async (req, res) => {
 
 app.get("/api/province_all_daily/raw", async (req, res) => {
   const { data } = await axios.get(
-    "https://data.covid19.go.id/public/api/prov_time.json"
+    `${PROXY_URL}https://data.covid19.go.id/public/api/prov_time.json`
   );
   res.status(200).send({
     data,
@@ -386,7 +389,7 @@ app.get("/api/province_all_daily/raw", async (req, res) => {
 
 app.get("/api/province_simple/raw", async (req, res) => {
   const { data } = await axios.get(
-    "https://data.covid19.go.id/public/api/prov_list.json"
+    `${PROXY_URL}https://data.covid19.go.id/public/api/prov_list.json`
   );
   res.status(200).send({
     data,
@@ -395,7 +398,7 @@ app.get("/api/province_simple/raw", async (req, res) => {
 
 app.get("/api/city_risk/raw", async (req, res) => {
   const { data } = await axios.get(
-    "https://data.covid19.go.id/public/api/skor.json"
+    `${PROXY_URL}https://data.covid19.go.id/public/api/skor.json`
   );
   res.status(200).send({
     data,
