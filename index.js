@@ -79,12 +79,12 @@ app.get("/api/national", async (req, res) => {
     `${PROXY_URL}https://data.covid19.go.id/public/api/update.json`
   );
   let modifiedData = {
+    updateDate: dateConverter(data.update.penambahan.created),
     update: {
       positive: data.update.penambahan.jumlah_positif,
       hospitalized: data.update.penambahan.jumlah_dirawat,
       recovered: data.update.penambahan.jumlah_sembuh,
       death: data.update.penambahan.jumlah_meninggal,
-      updateDate: dateConverter(data.update.penambahan.created),
     },
     total: {
       positive: data.update.total.jumlah_positif,
@@ -93,18 +93,14 @@ app.get("/api/national", async (req, res) => {
       death: data.update.total.jumlah_meninggal,
     },
   };
-  res.status(200).send({
-    modifiedData,
-  });
+  res.status(200).send(modifiedData);
 });
 
 app.get("/api/national/raw", async (req, res) => {
   const { data } = await axios.get(
     `${PROXY_URL}https://data.covid19.go.id/public/api/update.json`
   );
-  res.status(200).send({
-    data,
-  });
+  res.status(200).send(data);
 });
 
 app.get("/api/national/all_daily", async (req, res) => {
@@ -128,9 +124,7 @@ app.get("/api/national/all_daily", async (req, res) => {
       },
     };
   });
-  res.status(200).send({
-    modifiedData,
-  });
+  res.status(200).send(modifiedData);
 });
 
 app.get("/api/province", async (req, res) => {
@@ -161,9 +155,7 @@ app.get("/api/province", async (req, res) => {
     provinces: allProvinces,
   };
 
-  res.status(200).send({
-    modifiedData,
-  });
+  res.status(200).send(modifiedData);
 });
 
 app.get("/api/province/more", async (req, res) => {
@@ -205,18 +197,14 @@ app.get("/api/province/more", async (req, res) => {
     provinces: allProvinces,
   };
 
-  res.status(200).send({
-    modifiedData,
-  });
+  res.status(200).send(modifiedData);
 });
 
 app.get("/api/province/raw", async (req, res) => {
   const { data } = await axios.get(
     `${PROXY_URL}https://data.covid19.go.id/public/api/prov.json`
   );
-  res.status(200).send({
-    data,
-  });
+  res.status(200).send(data);
 });
 
 app.get("/api/province/:provincename", async (req, res) => {
@@ -245,10 +233,7 @@ app.get("/api/province/:provincename", async (req, res) => {
       withoutDate: data.sembuh_tanpa_tgl,
     },
   };
-  res.status(200).send({
-    //data,
-    modifiedData,
-  });
+  res.status(200).send(modifiedData);
 });
 
 app.get("/api/province/:provincename/more", async (req, res) => {
@@ -295,10 +280,7 @@ app.get("/api/province/:provincename/more", async (req, res) => {
     },
     dailyData: dailyData,
   };
-  res.status(200).send({
-    //data,
-    modifiedData,
-  });
+  res.status(200).send(modifiedData);
 });
 
 app.get("/api/province/:provincename/all_daily", async (req, res) => {
@@ -325,10 +307,7 @@ app.get("/api/province/:provincename/all_daily", async (req, res) => {
     };
   });
 
-  res.status(200).send({
-    //data,
-    modifiedData,
-  });
+  res.status(200).send(modifiedData);
 });
 
 app.get("/api/province/:provincename/raw", async (req, res) => {
@@ -337,72 +316,241 @@ app.get("/api/province/:provincename/raw", async (req, res) => {
       req.params.provincename +
       ".json"
   );
-  res.status(200).send({
-    data,
-  });
+  res.status(200).send(data);
 });
 
 app.get("/api/test_and_vacc/raw", async (req, res) => {
   const { data } = await axios.get(
     `${PROXY_URL}https://data.covid19.go.id/public/api/pemeriksaan-vaksinasi.json`
   );
-  res.status(200).send({
-    data,
+
+  res.status(200).send(data);
+});
+
+app.get("/api/vaccination", async (req, res) => {
+  const { data } = await axios.get(
+    `${PROXY_URL}https://data.covid19.go.id/public/api/pemeriksaan-vaksinasi.json`
+  );
+
+  let modifiedData = {
+    updateDate: data.vaksinasi.penambahan.created,
+    update: {
+      dose1: data.vaksinasi.penambahan.jumlah_vaksinasi_1,
+      dose2: data.vaksinasi.penambahan.jumlah_vaksinasi_2,
+    },
+    total: {
+      dose1:
+        data.vaksinasi.total.jumlah_vaksinasi_1 -
+        data.vaksinasi.total.jumlah_vaksinasi_2,
+      dose1plus: data.vaksinasi.total.jumlah_vaksinasi_1,
+      dose2: data.vaksinasi.total.jumlah_vaksinasi_2,
+    },
+  };
+
+  res.status(200).send(modifiedData);
+});
+
+app.get("/api/vaccination/all_daily", async (req, res) => {
+  const { data } = await axios.get(
+    `${PROXY_URL}https://data.covid19.go.id/public/api/pemeriksaan-vaksinasi.json`
+  );
+
+  let modifiedData = data.vaksinasi.harian.map((data) => {
+    return {
+      date: new Date(data.key).toLocaleDateString("id-ID"),
+      update: {
+        dose1: data.jumlah_vaksinasi_1.value,
+        dose2: data.jumlah_vaksinasi_2.value,
+      },
+      total: {
+        dose1:
+          data.jumlah_jumlah_vaksinasi_1_kum.value -
+          data.jumlah_jumlah_vaksinasi_2_kum.value,
+        dose1plus: data.jumlah_jumlah_vaksinasi_1_kum.value,
+        dose2: data.jumlah_jumlah_vaksinasi_2_kum.value,
+      },
+    };
   });
+
+  modifiedData = modifiedData.slice(42);
+
+  res.status(200).send(modifiedData);
+});
+
+app.get("/api/testing", async (req, res) => {
+  const { data } = await axios.get(
+    `${PROXY_URL}https://data.covid19.go.id/public/api/pemeriksaan-vaksinasi.json`
+  );
+
+  let modifiedData = {
+    updateDate: data.pemeriksaan.penambahan.created,
+    update: {
+      pcrTcm: data.pemeriksaan.penambahan.jumlah_orang_pcr_tcm,
+      antigen: data.pemeriksaan.penambahan.jumlah_orang_antigen,
+      specimen: {
+        pcrTcm: data.pemeriksaan.penambahan.jumlah_spesimen_pcr_tcm,
+        antigen: data.pemeriksaan.penambahan.jumlah_spesimen_antigen,
+      },
+    },
+    total: {
+      pcrTcm: data.pemeriksaan.total.jumlah_orang_pcr_tcm,
+      antigen: data.pemeriksaan.total.jumlah_orang_antigen,
+      specimen: {
+        pcrTcm: data.pemeriksaan.total.jumlah_spesimen_pcr_tcm,
+        antigen: data.pemeriksaan.total.jumlah_spesimen_antigen,
+      },
+    },
+  };
+
+  res.status(200).send(modifiedData);
+});
+
+app.get("/api/risk_profile", async (req, res) => {
+  const res1 = await axios.get(
+    `${PROXY_URL}https://data.covid19.go.id/public/api/pemeriksaan-vaksinasi.json`
+  );
+  const dataTest = res1.data;
+
+  const res2 = await axios.get(
+    `${PROXY_URL}https://data.covid19.go.id/public/api/update.json`
+  );
+  const dataCase = res2.data;
+
+  function avg(arr) {
+    let sum = 0;
+    arr.forEach((data) => {
+      sum += data;
+    });
+    return sum / arr.length;
+  }
+
+  const caseToday = dataCase.update.penambahan.jumlah_positif;
+  const caseTotal = dataCase.update.total.jumlah_positif;
+  const deathToday = dataCase.update.penambahan.jumlah_meninggal;
+  const deathTotal = dataCase.update.total.jumlah_meninggal;
+  const recoveryToday = dataCase.update.penambahan.jumlah_sembuh;
+  const recoveryTotal = dataCase.update.total.jumlah_sembuh;
+  const testToday =
+    dataTest.pemeriksaan.penambahan.jumlah_orang_pcr_tcm +
+    dataTest.pemeriksaan.penambahan.jumlah_orang_antigen;
+  const testTotal =
+    dataTest.pemeriksaan.total.jumlah_orang_pcr_tcm +
+    dataTest.pemeriksaan.total.jumlah_orang_antigen;
+  let case7days = dataCase.update.harian.slice(-7);
+  let sum = 0;
+  case7days.forEach((data) => {
+    sum += data.jumlah_positif.value;
+  });
+  const average = sum / case7days.length;
+
+  //7daysAvg/pop/100,000
+  let case100k = average / (270203917 / 100000);
+  case100k = parseFloat(case100k.toFixed(2));
+
+  //positive/totalTesting*100
+  let todayPositive = (caseToday / testToday) * 100;
+  todayPositive = parseFloat(todayPositive.toFixed(2));
+  let totalPositive = (caseTotal / testTotal) * 100;
+  totalPositive = parseFloat(totalPositive.toFixed(2));
+
+  let todayRecovery = (recoveryToday / caseToday) * 100;
+  todayRecovery = parseFloat(todayRecovery.toFixed(2));
+  let totalRecovery = (recoveryTotal / caseTotal) * 100;
+  totalRecovery = parseFloat(totalRecovery.toFixed(2));
+
+  let todayFatality = (deathToday / caseToday) * 100;
+  todayFatality = parseFloat(todayFatality.toFixed(2));
+  let totalFatality = (deathTotal / caseTotal) * 100;
+  totalFatality = parseFloat(totalFatality.toFixed(2));
+
+  let modifiedData = {
+    casePer100k: case100k,
+    rating: {
+      today: {
+        positive: todayPositive,
+        recovery: todayRecovery,
+        fatality: todayFatality,
+      },
+      overall: {
+        positive: totalPositive,
+        recovery: totalRecovery,
+        fatality: totalFatality,
+      },
+    },
+  };
+  res.status(200).send(modifiedData);
+});
+
+app.get("/api/testing/all_daily", async (req, res) => {
+  const { data } = await axios.get(
+    `${PROXY_URL}https://data.covid19.go.id/public/api/pemeriksaan-vaksinasi.json`
+  );
+
+  let modifiedData = data.pemeriksaan.harian.map((data) => {
+    return {
+      date: new Date(data.key).toLocaleDateString("id-ID"),
+      update: {
+        pcrTcm: data.jumlah_orang_pcr_tcm.value,
+        antigen: data.jumlah_orang_antigen.value,
+        specimen: {
+          pcrTcm: data.jumlah_spesimen_pcr_tcm.value,
+          antigen: data.jumlah_spesimen_antigen.value,
+        },
+      },
+      total: {
+        pcrTcm: data.jumlah_orang_pcr_tcm_kum.value,
+        antigen: data.jumlah_orang_antigen_kum.value,
+        specimen: {
+          pcrTcm: data.jumlah_spesimen_pcr_tcm_kum.value,
+          antigen: data.jumlah_spesimen_antigen_kum.value,
+        },
+      },
+    };
+  });
+
+  res.status(200).send(modifiedData);
 });
 
 app.get("/api/kecamatan/raw", async (req, res) => {
   const { data } = await axios.get(
     `${PROXY_URL}https://data.covid19.go.id/public/api/kecamatan_rawan.json`
   );
-  res.status(200).send({
-    data,
-  });
+  res.status(200).send(data);
 });
 
 app.get("/api/rumah_sakit/raw", async (req, res) => {
   const { data } = await axios.get(
     `${PROXY_URL}https://data.covid19.go.id/public/api/rs.json`
   );
-  res.status(200).send({
-    data,
-  });
+  res.status(200).send(data);
 });
 
 app.get("/api/lab/raw", async (req, res) => {
   const { data } = await axios.get(
     `${PROXY_URL}https://data.covid19.go.id/public/api/lab.json`
   );
-  res.status(200).send({
-    data,
-  });
+  res.status(200).send(data);
 });
 
 app.get("/api/province_all_daily/raw", async (req, res) => {
   const { data } = await axios.get(
     `${PROXY_URL}https://data.covid19.go.id/public/api/prov_time.json`
   );
-  res.status(200).send({
-    data,
-  });
+  res.status(200).send(data);
 });
 
 app.get("/api/province_simple/raw", async (req, res) => {
   const { data } = await axios.get(
     `${PROXY_URL}https://data.covid19.go.id/public/api/prov_list.json`
   );
-  res.status(200).send({
-    data,
-  });
+  res.status(200).send(data);
 });
 
 app.get("/api/city_risk/raw", async (req, res) => {
   const { data } = await axios.get(
     `${PROXY_URL}https://data.covid19.go.id/public/api/skor.json`
   );
-  res.status(200).send({
-    data,
-  });
+  res.status(200).send(data);
 });
 
 const PORT = process.env.PORT || 8081;
