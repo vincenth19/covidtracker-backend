@@ -390,17 +390,29 @@ app.get("/api/testing", async (req, res) => {
     update: {
       pcrTcm: data.pemeriksaan.penambahan.jumlah_orang_pcr_tcm,
       antigen: data.pemeriksaan.penambahan.jumlah_orang_antigen,
+      all:
+        data.pemeriksaan.penambahan.jumlah_orang_pcr_tcm +
+        data.pemeriksaan.penambahan.jumlah_orang_antigen,
       specimen: {
         pcrTcm: data.pemeriksaan.penambahan.jumlah_spesimen_pcr_tcm,
         antigen: data.pemeriksaan.penambahan.jumlah_spesimen_antigen,
+        all:
+          data.pemeriksaan.penambahan.jumlah_spesimen_pcr_tcm +
+          data.pemeriksaan.penambahan.jumlah_spesimen_antigen,
       },
     },
     total: {
       pcrTcm: data.pemeriksaan.total.jumlah_orang_pcr_tcm,
       antigen: data.pemeriksaan.total.jumlah_orang_antigen,
+      all:
+        data.pemeriksaan.total.jumlah_orang_pcr_tcm +
+        data.pemeriksaan.total.jumlah_orang_antigen,
       specimen: {
         pcrTcm: data.pemeriksaan.total.jumlah_spesimen_pcr_tcm,
         antigen: data.pemeriksaan.total.jumlah_spesimen_antigen,
+        all:
+          data.pemeriksaan.total.jumlah_spesimen_pcr_tcm +
+          data.pemeriksaan.total.jumlah_spesimen_antigen,
       },
     },
   };
@@ -510,17 +522,27 @@ app.get("/api/testing/all_daily", async (req, res) => {
       update: {
         pcrTcm: data.jumlah_orang_pcr_tcm.value,
         antigen: data.jumlah_orang_antigen.value,
+        all: data.jumlah_orang_pcr_tcm.value + data.jumlah_orang_antigen.value,
         specimen: {
           pcrTcm: data.jumlah_spesimen_pcr_tcm.value,
           antigen: data.jumlah_spesimen_antigen.value,
+          all:
+            data.jumlah_spesimen_pcr_tcm.value +
+            data.jumlah_spesimen_antigen.value,
         },
       },
       total: {
         pcrTcm: data.jumlah_orang_pcr_tcm_kum.value,
         antigen: data.jumlah_orang_antigen_kum.value,
+        all:
+          data.jumlah_orang_pcr_tcm_kum.value +
+          data.jumlah_orang_antigen_kum.value,
         specimen: {
           pcrTcm: data.jumlah_spesimen_pcr_tcm_kum.value,
           antigen: data.jumlah_spesimen_antigen_kum.value,
+          all:
+            data.jumlah_spesimen_pcr_tcm_kum.value +
+            data.jumlah_spesimen_antigen_kum.value,
         },
       },
     };
