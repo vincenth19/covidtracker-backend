@@ -27,6 +27,8 @@ function dateConverter(date) {
   return time.toString();
 }
 
+const INDO_POP = 270203917;
+
 app.get("/", async (req, res) => {
   res.redirect("/api");
 });
@@ -78,8 +80,19 @@ app.get("/api/national", async (req, res) => {
   const { data } = await axios.get(
     `${PROXY_URL}https://data.covid19.go.id/public/api/update.json`
   );
+
+  let case100k = (data.update.total.jumlah_positif / INDO_POP) * 100000;
+  let death100k = (data.update.total.jumlah_meninggal / INDO_POP) * 100000;
+  let mortality = (data.update.total.jumlah_meninggal / INDO_POP) * 100;
+  mortality = parseFloat(mortality.toFixed(2));
+  case100k = parseFloat(case100k.toFixed(2));
+  death100k = parseFloat(death100k.toFixed(2));
+
   let modifiedData = {
     updateDate: dateConverter(data.update.penambahan.created),
+    casePer100k: case100k,
+    deathPer100k: death100k,
+    mortality: mortality,
     update: {
       positive: data.update.penambahan.jumlah_positif,
       hospitalized: data.update.penambahan.jumlah_dirawat,
@@ -416,67 +429,82 @@ app.get("/api/risk_profile", async (req, res) => {
   );
   const dataCase = res2.data;
 
-  function avg(arr) {
-    let sum = 0;
-    arr.forEach((data) => {
-      sum += data;
-    });
-    return sum / arr.length;
-  }
-
-  const caseToday = dataCase.update.penambahan.jumlah_positif;
   const caseTotal = dataCase.update.total.jumlah_positif;
-  const deathToday = dataCase.update.penambahan.jumlah_meninggal;
   const deathTotal = dataCase.update.total.jumlah_meninggal;
-  const recoveryToday = dataCase.update.penambahan.jumlah_sembuh;
   const recoveryTotal = dataCase.update.total.jumlah_sembuh;
-  const testToday =
-    dataTest.pemeriksaan.penambahan.jumlah_orang_pcr_tcm +
-    dataTest.pemeriksaan.penambahan.jumlah_orang_antigen;
   const testTotal =
     dataTest.pemeriksaan.total.jumlah_orang_pcr_tcm +
     dataTest.pemeriksaan.total.jumlah_orang_antigen;
   let case7days = dataCase.update.harian.slice(-7);
-  let sum = 0;
-  case7days.forEach((data) => {
-    sum += data.jumlah_positif.value;
-  });
-  const average = sum / case7days.length;
+  let test7days = dataTest.pemeriksaan.harian.slice(-7);
 
-  //7daysAvg/pop/100,000
-  let case100k = average / (270203917 / 100000);
-  case100k = parseFloat(case100k.toFixed(2));
+  let caseSum = 0;
+  let deathSum = 0;
+  let recoveredSum = 0;
+  let testSum = 0;
+
+  case7days.forEach((data) => {
+    caseSum += data.jumlah_positif.value;
+    deathSum += data.jumlah_meninggal.value;
+    recoveredSum += data.jumlah_sembuh.value;
+  });
+
+  test7days.forEach((data) => {
+    testSum +=
+      data.jumlah_orang_antigen.value + data.jumlah_orang_pcr_tcm.value;
+  });
+
+  const caseAverage = caseSum / 7;
+  const deathAverage = deathSum / 7;
+  const recoveredAverage = recoveredSum / 7;
+  const testAverage = testSum / 7;
+
+  //7daysAvg/pop*100,000
+  //let case100k7days = (caseAverage / INDO_POP) * 100000;
+  //let death100k7days = (deathAverage / INDO_POP) * 100000;
+  //case100k7days = parseFloat(case100k7days.toFixed(2));
+  //death100k7days = parseFloat(death100k7days.toFixed(2));
+
+  // let case100k = (caseTotal / INDO_POP) * 100000;
+  // let death100k = (deathTotal / INDO_POP) * 100000;
+  // case100k = parseFloat(case100k.toFixed(2));
+  // death100k = parseFloat(death100k.toFixed(2));
 
   //positive/totalTesting*100
-  let todayPositive = (caseToday / testToday) * 100;
-  todayPositive = parseFloat(todayPositive.toFixed(2));
+  let weeklyPositive = (caseAverage / testAverage) * 100;
+  weeklyPositive = parseFloat(weeklyPositive.toFixed(2));
   let totalPositive = (caseTotal / testTotal) * 100;
   totalPositive = parseFloat(totalPositive.toFixed(2));
 
-  let todayRecovery = (recoveryToday / caseToday) * 100;
-  todayRecovery = parseFloat(todayRecovery.toFixed(2));
-  let totalRecovery = (recoveryTotal / caseTotal) * 100;
-  totalRecovery = parseFloat(totalRecovery.toFixed(2));
+  //CFR = death/(death+recovery)
+  let cfr7days = (deathAverage / (deathAverage + recoveredAverage)) * 100;
+  cfr7days = parseFloat(cfr7days.toFixed(2));
+  let cfrTotal = (deathTotal / (deathTotal + recoveryTotal)) * 100;
+  cfrTotal = parseFloat(cfrTotal.toFixed(2));
 
-  let todayFatality = (deathToday / caseToday) * 100;
-  todayFatality = parseFloat(todayFatality.toFixed(2));
-  let totalFatality = (deathTotal / caseTotal) * 100;
-  totalFatality = parseFloat(totalFatality.toFixed(2));
-
+  //IFR = death/totalCase
+  let ifr7days = (deathAverage / caseAverage) * 100;
+  ifr7days = parseFloat(ifr7days.toFixed(2));
+  let ifrTotal = (deathTotal / caseTotal) * 100;
+  ifrTotal = parseFloat(ifrTotal.toFixed(2));
   let modifiedData = {
-    casePer100k: case100k,
-    rating: {
-      today: {
-        positive: todayPositive,
-        recovery: todayRecovery,
-        fatality: todayFatality,
-      },
-      overall: {
-        positive: totalPositive,
-        recovery: totalRecovery,
-        fatality: totalFatality,
-      },
+    // casePer100k: case100k,
+    // deathPer100k: death100k,
+    // mortality: mortality,
+    // rating: {
+    thisWeek: {
+      //casePer100k: case100k7days,
+      //deathPer100k: death100k7days,
+      positive: weeklyPositive,
+      cfr: cfr7days,
+      ifr: ifr7days,
     },
+    overall: {
+      positive: totalPositive,
+      cfr: cfrTotal,
+      ifr: ifrTotal,
+    },
+    // },
   };
   res.status(200).send(modifiedData);
 });
