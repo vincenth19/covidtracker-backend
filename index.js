@@ -81,47 +81,15 @@ app.get("/api/national", async (req, res) => {
     `${PROXY_URL}https://data.covid19.go.id/public/api/update.json`
   );
 
-  let case7days = data.update.harian.slice(-7);
-
-  let caseSum = 0;
-  let deathSum = 0;
-
-  case7days.forEach((data) => {
-    caseSum += data.jumlah_positif.value;
-    deathSum += data.jumlah_meninggal.value;
-  });
-
-  const caseAverage = caseSum / 7;
-  const deathAverage = deathSum / 7;
-
-  //7daysAvg/pop*100,000
-  let case100k7days = (caseAverage / INDO_POP) * 100000;
-  let death100k7days = (deathAverage / INDO_POP) * 100000;
-  case100k7days = parseFloat(case100k7days.toFixed(2));
-  death100k7days = parseFloat(death100k7days.toFixed(2));
-
-  let case100k = (data.update.total.jumlah_positif / INDO_POP) * 100000;
-  let death100k = (data.update.total.jumlah_meninggal / INDO_POP) * 100000;
-  let mortality = (data.update.total.jumlah_meninggal / INDO_POP) * 100;
-  mortality = parseFloat(mortality.toFixed(2));
-  case100k = parseFloat(case100k.toFixed(2));
-  death100k = parseFloat(death100k.toFixed(2));
-
   let modifiedData = {
     updateDate: dateConverter(data.update.penambahan.created),
-
-    mortality: mortality,
     update: {
-      casePer100k: case100k7days,
-      deathPer100k: death100k7days,
       positive: data.update.penambahan.jumlah_positif,
       hospitalized: data.update.penambahan.jumlah_dirawat,
       recovered: data.update.penambahan.jumlah_sembuh,
       death: data.update.penambahan.jumlah_meninggal,
     },
     total: {
-      casePer100k: case100k,
-      deathPer100k: death100k,
       positive: data.update.total.jumlah_positif,
       hospitalized: data.update.total.jumlah_dirawat,
       recovered: data.update.total.jumlah_sembuh,
@@ -482,15 +450,15 @@ app.get("/api/risk_profile", async (req, res) => {
   const testAverage = testSum / 7;
 
   //7daysAvg/pop*100,000
-  //let case100k7days = (caseAverage / INDO_POP) * 100000;
-  //let death100k7days = (deathAverage / INDO_POP) * 100000;
-  //case100k7days = parseFloat(case100k7days.toFixed(2));
-  //death100k7days = parseFloat(death100k7days.toFixed(2));
+  let case100k7days = (caseAverage / INDO_POP) * 100000;
+  let death100k7days = (deathAverage / INDO_POP) * 100000;
+  case100k7days = parseFloat(case100k7days.toFixed(2));
+  death100k7days = parseFloat(death100k7days.toFixed(2));
 
-  // let case100k = (caseTotal / INDO_POP) * 100000;
-  // let death100k = (deathTotal / INDO_POP) * 100000;
-  // case100k = parseFloat(case100k.toFixed(2));
-  // death100k = parseFloat(death100k.toFixed(2));
+  let case100k = (caseTotal / INDO_POP) * 100000;
+  let death100k = (deathTotal / INDO_POP) * 100000;
+  case100k = parseFloat(case100k.toFixed(2));
+  death100k = parseFloat(death100k.toFixed(2));
 
   //positive/totalTesting*100
   let weeklyPositive = (caseAverage / testAverage) * 100;
@@ -510,18 +478,18 @@ app.get("/api/risk_profile", async (req, res) => {
   let ifrTotal = (deathTotal / caseTotal) * 100;
   ifrTotal = parseFloat(ifrTotal.toFixed(2));
   let modifiedData = {
-    // casePer100k: case100k,
-    // deathPer100k: death100k,
     // mortality: mortality,
     // rating: {
     thisWeek: {
-      //casePer100k: case100k7days,
-      //deathPer100k: death100k7days,
+      casePer100k: case100k7days,
+      deathPer100k: death100k7days,
       positive: weeklyPositive,
       cfr: cfr7days,
       ifr: ifr7days,
     },
     overall: {
+      casePer100k: case100k,
+      deathPer100k: death100k,
       positive: totalPositive,
       cfr: cfrTotal,
       ifr: ifrTotal,
