@@ -336,7 +336,7 @@ app.get("/api/vaccination", async (req, res) => {
   );
 
   let modifiedData = {
-    updateDate: data.vaksinasi.penambahan.created,
+    updateDate: dateConverter(data.vaksinasi.penambahan.created),
     update: {
       dose1: data.vaksinasi.penambahan.jumlah_vaksinasi_1,
       dose2: data.vaksinasi.penambahan.jumlah_vaksinasi_2,
@@ -388,7 +388,7 @@ app.get("/api/testing", async (req, res) => {
   );
 
   let modifiedData = {
-    updateDate: data.pemeriksaan.penambahan.created,
+    updateDate: dateConverter(data.pemeriksaan.penambahan.created),
     update: {
       pcrTcm: data.pemeriksaan.penambahan.jumlah_orang_pcr_tcm,
       antigen: data.pemeriksaan.penambahan.jumlah_orang_antigen,
@@ -494,6 +494,7 @@ app.get("/api/risk_profile", async (req, res) => {
   let modifiedData = {
     // mortality: mortality,
     // rating: {
+    updateDate: dateConverter(dataTest.pemeriksaan.penambahan.created),
     thisWeek: {
       casePer100k: case100k7days,
       deathPer100k: death100k7days,
