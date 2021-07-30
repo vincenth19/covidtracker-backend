@@ -363,6 +363,8 @@ app.get("/api/vaccination/all_daily", async (req, res) => {
       date: new Date(data.key).toLocaleDateString("id-ID"),
       update: {
         dose1: data.jumlah_vaksinasi_1.value,
+        dose1plus:
+          data.jumlah_vaksinasi_1.value + data.jumlah_vaksinasi_2.value,
         dose2: data.jumlah_vaksinasi_2.value,
       },
       total: {
