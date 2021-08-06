@@ -458,10 +458,10 @@ app.get("/api/risk_profile", async (req, res) => {
       data.jumlah_orang_antigen.value + data.jumlah_orang_pcr_tcm.value;
   });
 
-  const caseAverage = caseSum / 7;
-  const deathAverage = deathSum / 7;
-  const recoveredAverage = recoveredSum / 7;
-  const testAverage = testSum / 7;
+  const caseAverage = caseSum;
+  const deathAverage = deathSum;
+  const recoveredAverage = recoveredSum;
+  const testAverage = testSum;
 
   //7daysAvg/pop*100,000
   let case100k7days = (caseAverage / INDO_POP) * 100000;
